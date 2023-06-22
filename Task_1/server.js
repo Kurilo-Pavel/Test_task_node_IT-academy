@@ -4,7 +4,7 @@ const path = require('path');
 const os = require('os');
 
 const server = express();
-const port = 7722;
+const port = 7780;
 const pathFile = path.join(__dirname, '/file.txt');
 const pathLog = path.join(__dirname, '/server.log');
 

@@ -3,11 +3,9 @@ const fs = require('fs');
 const os = require("os");
 const path = require("path");
 
-
 const server = express();
 const port = 7780;
 const pathLog = path.join(__dirname, '/server.log');
-
 
 const writeLog = (logFilePath, logLine) => {
   const date = new Date();
@@ -32,7 +30,7 @@ server.get('/', (req, res) => {
       password = 'You should enter password';
     }
     res.send(
-      '<form method="get" action="http://localhost:7780/">' +
+      '<form method="get" action="http://178.172.195.18:7780/">' +
       '<label for="name"></label>' +
       `<input type="text" id="name"  name="name" value=${req.query.name === undefined ? '' : req.query.name} >` +
       `<span>${name}</span>` +
@@ -45,26 +43,7 @@ server.get('/', (req, res) => {
       '</form>'
     );
   }
-  // if (!req.query.name) {
-  //   console.log("req.query")
-  //   res.use('<h1>Enter your name</h1>');
-  // } else if (!req.query.password) {
-  //   res.use('<h1>Enter your password</h1>');
-  // } else {
-  //   res.send(`<h1>WELCOME ${req.query.name}</h1>`);
-  // }
-
-
 });
-// server.get('/', (req, res) => {
-//   if (req.query.name.trim().length === 0) {
-//     res.status(401).end('<h1>Enter your name</h1>');
-//   } else if (req.query.password.trim().length === 0) {
-//     res.status(401).end('<h1>Enter your password</h1>');
-//   } else {
-//     res.send(`<h1>WELCOME ${req.query.name}</h1>`);
-//   }
-// })
 
 server.listen(port, () => {
   console.log("server start work");
