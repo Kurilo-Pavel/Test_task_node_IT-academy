@@ -4,7 +4,7 @@ const os = require("os");
 const path = require("path");
 
 const server = express();
-const port = 7780;
+const port = 7781;
 const pathLog = path.join(__dirname, '/server.log');
 
 const writeLog = (logFilePath, logLine) => {
@@ -30,7 +30,7 @@ server.get('/', (req, res) => {
       password = 'You should enter password';
     }
     res.send(
-      '<form method="get" action="http://178.172.195.18:7780/">' +
+      '<form method="get" action="http://178.172.195.18:7781/">' +
       '<label for="name"></label>' +
       `<input type="text" id="name"  name="name" value=${req.query.name === undefined ? '' : req.query.name} >` +
       `<span>${name}</span>` +
