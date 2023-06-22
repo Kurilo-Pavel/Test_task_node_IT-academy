@@ -1,0 +1,1 @@
+[{"id":1,"name":"Ivanov","votes":4},{"id":2,"name":"Petrov","votes":7},{"id":3,"name":"Sidorov","votes":9}]

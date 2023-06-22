@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Task 1</title>
+</head>
+<body>
+<div class="userVotes"></div>
+<div class="buttons">
+  <h2>Vote</h2>
+</div>
+</body>
+<script>
+  const users = document.getElementsByClassName("userVotes")[0];
+
+  const getUsers = async () => {
+    const response = await fetch("http://localhost:7722/variants");
+    const data = await response.json();
+    data.forEach(user => {
+      const mainDiv = document.createElement("div");
+      const fieldUser = document.createElement("h3");
+      fieldUser.textContent = user.name;
+      const userVotes = document.createElement("span");
+      userVotes.id = user.id;
+      mainDiv.appendChild(fieldUser);
+      mainDiv.appendChild(userVotes);
+      users.appendChild(mainDiv);
+      const fieldButtons = document.getElementsByClassName("buttons")[0];
+      const button = document.createElement("button");
+      button.innerHTML = user.name;
+      button.onclick = () => {
+        postVoice(user.id);
+      };
+      fieldButtons.appendChild(button);
+    });
+  };
+
+  const getVoices = async () => {
+    const response = await fetch("http://localhost:7722/stat");
+    const data = await response.json();
+    data.forEach(voice => {
+      const user = document.getElementById(voice.id);
+      user.innerHTML = voice.votes;
+    });
+  };
+
+  const postVoice = async (id) => {
+    await fetch("http://localhost:7722/vote",
+      {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({id: id})
+      });
+    getVoices();
+  };
+
+  getUsers();
+  getVoices();
+</script>
+</html>
