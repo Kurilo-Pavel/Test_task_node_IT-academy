@@ -9,12 +9,15 @@
 <div class="buttons">
   <h2>Vote</h2>
 </div>
+<button type="submit" onclick={downloadFile("xml")}>xml</button>
+<button type="submit" onclick={downloadFile("json")}>json</button>
+<button type="submit" onclick={downloadFile("html")}>html</button>
 </body>
 <script>
   const users = document.getElementsByClassName("userVotes")[0];
 
   const getUsers = async () => {
-    const response = await fetch("http://178.172.195.18:7780/variants");
+    const response = await fetch("/variants");
     const data = await response.json();
     data.forEach(user => {
       const mainDiv = document.createElement("div");
@@ -36,7 +39,7 @@
   };
 
   const getVoices = async () => {
-    const response = await fetch("http://178.172.195.18:7780/stat");
+    const response = await fetch("/stat", {method: "POST"});
     const data = await response.json();
     data.forEach(voice => {
       const user = document.getElementById(voice.id);
@@ -45,7 +48,7 @@
   };
 
   const postVoice = async (id) => {
-    await fetch("http://178.172.195.18:7780/vote",
+    await fetch("/vote",
       {
         method: "POST",
         headers: {"Content-Type": "application/json"},
@@ -54,7 +57,29 @@
     getVoices();
   };
 
-  getUsers();
-  getVoices();
+  getUsers().then(() => {
+    getVoices();
+  });
+
+  const downloadFile = async (typeFile) => {
+    let contentType;
+    switch (typeFile) {
+      case "xml":
+        contentType = "application/xml";
+        break;
+      case "json":
+        contentType = "application/json";
+        break;
+      case "html":
+        contentType = "text/html";
+        break;
+    }
+    const response = await fetch("/download", {headers: {"Content-Type": contentType}});
+    const data = await response.blob();
+    let file = document.createElement("a");
+    file.href = window.URL.createObjectURL(new Blob([data]));
+    file.download = "Voice." + typeFile;
+    file.click();
+  }
 </script>
 </html>
