@@ -58,8 +58,8 @@ server.post('/vote', (request, response) => {
   response.send(request.body);
 })
 
-
 server.get('/download', (request, response) => {
+  writeLog(pathLog, `[${port}]` + ' ' + 'send file xml');
   const fileType = request.headers["content-type"];
   let data = '';
   switch (fileType) {

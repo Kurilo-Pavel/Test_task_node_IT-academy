@@ -15,9 +15,10 @@
 </body>
 <script>
   const users = document.getElementsByClassName("userVotes")[0];
+  let url = "http://178.172.195.18:7780";
 
   const getUsers = async () => {
-    const response = await fetch("http://178.172.195.18:7780/variants");
+    const response = await fetch(url + "/variants");
     const data = await response.json();
     data.forEach(user => {
       const mainDiv = document.createElement("div");
@@ -39,7 +40,7 @@
   };
 
   const getVoices = async () => {
-    const response = await fetch("http://178.172.195.18:7780/stat", {method: "POST"});
+    const response = await fetch(url + "/stat", {method: "POST"});
     const data = await response.json();
     data.forEach(voice => {
       const user = document.getElementById(voice.id);
@@ -48,7 +49,7 @@
   };
 
   const postVoice = async (id) => {
-    await fetch("http://178.172.195.18:7780/vote",
+    await fetch(url + "/vote",
       {
         method: "POST",
         headers: {"Content-Type": "application/json"},
@@ -74,7 +75,8 @@
         contentType = "text/html";
         break;
     }
-    const response = await fetch("http://178.172.195.18:7780/download", {headers: {"Content-Type": contentType}});
+
+    const response = await fetch(url + "/download", {headers: {"Content-Type": contentType}});
     const data = await response.blob();
     let file = document.createElement("a");
     file.href = window.URL.createObjectURL(new Blob([data]));
