@@ -65,7 +65,7 @@ server.get('/download', (request, response) => {
   switch (fileType) {
     case 'application/xml':
       writeLog(pathLog, `[${port}]` + ' ' + 'send file xml');
-      const fileXML = fs.createWriteStream('voice.xml');
+      const fileXML = fs.createWriteStream(path.join(__dirname, '/voice.xml'));
       JSON.parse(currentUsers).forEach(user => {
         data += `<User><name>${user.name}</name><votes>${user.votes}</votes></User>` + os.EOL;
       });
@@ -75,14 +75,14 @@ server.get('/download', (request, response) => {
       break;
     case 'application/json':
       writeLog(pathLog, `[${port}]` + ' ' + 'send file json');
-      const fileJSON = fs.createWriteStream('voice.json');
+      const fileJSON = fs.createWriteStream(path.join(__dirname, '/voice.json'));
       fileJSON.write(currentUsers, () => {
         response.sendFile(__dirname + '/voice.json');
       });
       break;
     case 'text/html':
       writeLog(pathLog, `[${port}]` + ' ' + 'send file html');
-      const fileHTML = fs.createWriteStream('voice.html', {flags: 'w'});
+      const fileHTML = fs.createWriteStream(path.join(__dirname, '/voice.html'));
       JSON.parse(currentUsers).forEach(user => {
         data += `<div><span>${user.name}</span> - <span>${user.votes}</span></div>` + os.EOL;
       });
