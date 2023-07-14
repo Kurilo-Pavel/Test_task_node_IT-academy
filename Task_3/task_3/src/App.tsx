@@ -6,6 +6,10 @@ import Body from "./components/Body";
 import Select from "./components/Select";
 
 function App() {
+
+  const path = "http://localhost:7780/";
+  // const path = "http://178.172.195.18:7780/";
+
   const [url, setUrl] = useState("");
   const [parameters, setParameters] = useState<{ id: number, key: string, value: string }[]>([]);
   const [headers, setHeaders] = useState<{ id: number, key: string, value: string }[]>([]);
@@ -53,7 +57,7 @@ function App() {
   };
 
   const saveRequest = async () => {
-    const response = await fetch("http://localhost:7780/writeFile", {
+    const response = await fetch(`${path}writeFile`, {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({method: method, url: url, parameters: parameters, body: body, headers: headers})
@@ -63,14 +67,14 @@ function App() {
   };
 
   const getRequests = async () => {
-    const response = await fetch("http://localhost:7780/readFile");
+    const response = await fetch(`${path}readFile`);
     const data = await response.json();
     setDataRequest(data);
     return data
   }
 
   const sendRequest = async () => {
-    const response = await fetch("http://localhost:7780/request", {
+    const response = await fetch(`${path}request`, {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({method: method, url: url, parameters: parameters, body: body, headers: headers})
