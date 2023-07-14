@@ -1,1 +1,1 @@
-[{"id":1,"name":"Ivanov","votes":9},{"id":2,"name":"Petrov","votes":23},{"id":3,"name":"Sidorov","votes":19}]
+[{"id":1,"name":"Ivanov","votes":10},{"id":2,"name":"Petrov","votes":26},{"id":3,"name":"Sidorov","votes":19}]
