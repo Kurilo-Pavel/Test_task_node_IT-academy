@@ -2,6 +2,7 @@ const express = require('express');
 const request = require('request')
 const fs = require('fs');
 const path = require('path');
+const querystring = require("querystring");
 
 const webserver = express();
 const port = 7780;
@@ -15,6 +16,20 @@ webserver.options('/*', (req, res) => {
   res.setHeader("Access-Control-Allow-Methods", "GET,DELETE,POST,PUT");
   res.send("");
 });
+
+webserver.get("/", (req, res) => {
+  try {
+    const originalUrlDecoded = querystring.unescape(req.originalUrl);
+    const filePath = path.resolve(__dirname, "task_3/build", "index.html");
+    const stats = fs.statSync(filePath);
+    res.setHeader("Content-Type", "text/html");
+    const fileStream = fs.createReadStream(filePath);
+    fileStream.pipe(res);
+  } catch (err) {
+    console.log(err);
+    res.status(404).end();
+  }
+})
 
 webserver.post("/request", (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
