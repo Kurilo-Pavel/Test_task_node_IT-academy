@@ -70,7 +70,7 @@ function App() {
     const response = await fetch(`${path}readFile`);
     const data = await response.json();
     setDataRequest(data);
-    return data
+    return data;
   }
 
   const sendRequest = async () => {
