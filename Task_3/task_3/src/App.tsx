@@ -8,8 +8,8 @@ import {validation} from "./validation.js";
 
 function App() {
 
-  const path = "http://localhost:7780/";
-  // const path = "http://178.172.195.18:7780/";
+  // const path = "http://localhost:7780/";
+  const path = "http://178.172.195.18:7780/";
 
   const [url, setUrl] = useState("");
   const [parameters, setParameters] = useState<{ id: number, key: string, value: string }[]>([]);
@@ -94,7 +94,7 @@ function App() {
     const response = await fetch(`${path}readFile`);
     const data = await response.json();
     setDataRequest(data);
-    return data;
+    // return data;
   }
 
   const sendRequest = async () => {
