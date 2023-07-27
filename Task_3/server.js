@@ -14,7 +14,8 @@ const pathRequest = path.join(__dirname, '/request.json');
 webserver.use(express.json());
 
 webserver.options('/*', (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  // res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.setHeader("Access-Control-Allow-Origin", "http://178.172.195.18:7780");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   res.setHeader("Access-Control-Allow-Methods", "GET,DELETE,POST,PUT");
   res.send("");
@@ -32,7 +33,8 @@ webserver.get("/", (req, res) => {
 })
 
 webserver.post("/request", (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  // res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.setHeader("Access-Control-Allow-Origin", "http://178.172.195.18:7780");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   res.setHeader("Access-Control-Allow-Methods", "GET,DELETE,POST,PUT");
   try {
@@ -64,11 +66,7 @@ webserver.post("/request", (req, res) => {
   }
 });
 
-
 webserver.get("/readFile", (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  res.setHeader("Access-Control-Allow-Methods", "GET,DELETE,POST,PUT");
   try {
     fs.readFile(pathRequest, "utf8", (err, data) => {
       let requestData = data === '' ? 'null' : data;
@@ -81,9 +79,6 @@ webserver.get("/readFile", (req, res) => {
 });
 
 webserver.post("/writeFile", (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  res.setHeader("Access-Control-Allow-Methods", "GET,DELETE,POST,PUT");
   try {
     fs.readFile(pathRequest, "utf8", (err, data) => {
       let dataFile;
