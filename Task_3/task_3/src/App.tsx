@@ -81,20 +81,41 @@ function App() {
   };
 
   const saveRequest = async () => {
-    const response = await fetch(`${path}writeFile`, {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({method: method, url: url, parameters: parameters, body: body, headers: headers})
+    const errors: { url?: string, parameters?: { id: number, key: boolean, value: boolean }[], headers?: { id: number, key: boolean, value: boolean }[] }[] = validation({
+      method: method,
+      url: url,
+      parameters: parameters,
+      body: body,
+      headers: headers
     });
-    const data = await response.json();
-    setDataRequest(data.file);
+    if (errors.length > 0) {
+      errors.forEach(error => {
+        if (error.url) {
+          setErrorUrl(error.url);
+        }
+        if (error.parameters) {
+          setErrorParam(error.parameters);
+        }
+        if (error.headers) {
+          setErrorHeader(error.headers);
+        }
+      })
+    } else {
+      const response = await fetch(`${path}writeFile`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({method: method, url: url, parameters: parameters, body: body, headers: headers})
+      });
+      const data = await response.json();
+      setDataRequest(data.file);
+    }
   };
 
   const getRequests = async () => {
     const response = await fetch(`${path}readFile`);
     const data = await response.json();
     setDataRequest(data);
-    // return data;
+    return data;
   }
 
   const sendRequest = async () => {
@@ -203,6 +224,7 @@ function App() {
             </button>
             <button onClick={sendRequest}>Send request</button>
             <button onClick={clearForm}> Clear form</button>
+            <button onClick={getRequests}> Read file</button>
           </div>
         </div>
       </div>
