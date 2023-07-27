@@ -1,10 +1,15 @@
 .App {
+  display: flex;
+  flex-direction: column;
+}
+
+.request {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
 }
 
 .result {
-  margin: 10px;
+  padding: 10px;
 }
 
 .buttonReq {
@@ -14,7 +19,7 @@
 .options {
   display: grid;
   gap: 1rem;
-  height: fit-content;
+  padding: 10px;
 }
 
 .main_part {
@@ -41,6 +46,7 @@
 
 .param {
   display: flex;
+  gap: 30px;
   align-items: center;
   justify-content: space-between;
   margin: 5px;
@@ -60,10 +66,29 @@
   box-sizing: border-box;
 }
 
-.requests {
+.response {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-row: 2;
-  grid-column-start: 1;
-  grid-column-end: 3;
+}
+
+.bodyResponse, .headerResponse, .options, .result {
+  border: 1px solid gray;
+}
+
+h3 {
+  margin: 0 0 10px;
+}
+
+button {
+  height: max-content;
+}
+
+input {
+  height: 1.5rem;
+  box-sizing: border-box;
+}
+
+.error {
+  color: red;
+  border: 1px solid red;
 }

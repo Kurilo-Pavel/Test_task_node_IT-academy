@@ -1,0 +1,34 @@
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.option_request {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.request {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 10px;
+}
+
+.res_body, .res_headers, .save_requests, .request {
+  border: 1px solid gray;
+}
+
+h3 {
+  margin: 0 0 10px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-around;
+}
+.response{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}

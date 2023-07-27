@@ -4,6 +4,7 @@ import Params from "./components/Params";
 import Headers from "./components/Headers";
 import Body from "./components/Body";
 import Select from "./components/Select";
+import {validation} from "./validation.js";
 
 function App() {
 
@@ -16,8 +17,31 @@ function App() {
   const [method, setMethod] = useState("GET");
   const [body, setBody] = useState("");
   const [dataRequest, setDataRequest] = useState<{ method: string, url: string, body: string, parameters: { id: number, key: string, value: string }[], headers: { id: number, key: string, value: string }[] }[]>([]);
-  const [dataHeader, detDataHeader] = useState();
+  const [dataHeader, setDataHeader] = useState();
   const [dataBody, setDataBody] = useState();
+  const [errorUrl, setErrorUrl] = useState("");
+  const [errorParam, setErrorParam] = useState<{ id: number, key: boolean, value: boolean }[]>([{
+    id: 0,
+    key: true,
+    value: true
+  }]);
+  const [errorHeader, setErrorHeader] = useState<{ id: number, key: boolean, value: boolean }[]>([{
+    id: 0,
+    key: true,
+    value: true
+  }]);
+
+  useEffect(() => {
+    setErrorUrl("");
+  }, [url]);
+
+  useEffect(() => {
+    setErrorHeader([{id: 0, key: true, value: true}]);
+  }, [headers]);
+
+  useEffect(() => {
+    setErrorParam([{id: 0, key: true, value: true}]);
+  }, [parameters]);
 
   useEffect(() => {
     getRequests();
@@ -63,7 +87,7 @@ function App() {
       body: JSON.stringify({method: method, url: url, parameters: parameters, body: body, headers: headers})
     });
     const data = await response.json();
-    setDataRequest(data);
+    setDataRequest(data.file);
   };
 
   const getRequests = async () => {
@@ -74,14 +98,35 @@ function App() {
   }
 
   const sendRequest = async () => {
-    const response = await fetch(`${path}request`, {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({method: method, url: url, parameters: parameters, body: body, headers: headers})
+    const errors: { url?: string, parameters?: { id: number, key: boolean, value: boolean }[], headers?: { id: number, key: boolean, value: boolean }[] }[] = validation({
+      method: method,
+      url: url,
+      parameters: parameters,
+      body: body,
+      headers: headers
     });
-    const data = await response.json();
-    detDataHeader(data.header);
-    setDataBody(data.body);
+    if (errors.length > 0) {
+      errors.forEach(error => {
+        if (error.url) {
+          setErrorUrl(error.url);
+        }
+        if (error.parameters) {
+          setErrorParam(error.parameters);
+        }
+        if (error.headers) {
+          setErrorHeader(error.headers);
+        }
+      })
+    } else {
+      const response = await fetch(`${path}request`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({method: method, url: url, parameters: parameters, body: body, headers: headers})
+      });
+      const data = await response.json();
+      setDataHeader(data.header);
+      setDataBody(data.body);
+    }
   };
 
   const clearForm = () => {
@@ -103,60 +148,75 @@ function App() {
 
   return (
     <div className="App">
-      <div className="result">
-        {dataRequest && dataRequest.map((request, index) => {
-          return <button className="buttonReq" key={index}
-                         onClick={() => getOptions(request)}>{JSON.stringify(request)}</button>
-        })}
-      </div>
-      <div className="options">
-        <div className="main_part">
-          <label htmlFor="method" className="title">Method
-            <Select array={methods} props={method} setProps={setMethod}/>
-          </label>
-          <label htmlFor="url" className="title">URL
-            <input
-              type="text"
-              id="url"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              className="field"/>
-          </label>
+      <div className="request">
+        <div className="result">
+          <h3>Save requests</h3>
+          {dataRequest && dataRequest.map((request, index) => {
+            return <button
+              className="buttonReq"
+              key={index}
+              onClick={() => getOptions(request)}>{JSON.stringify(request)}
+            </button>
+          })}
         </div>
-        {method === "GET" || method === ""
-          ? <div>
-            {parameters.length > 0
-              && <Params
-                params={parameters}
-                setParams={setParameters}
-                deleteParam={deleteParam}
-              />}
-            <button onClick={addParam}>Add parameter</button>
+        <div className="options">
+          <div className="main_part">
+            <label htmlFor="method" className="title">Method
+              <Select array={methods} props={method} setProps={setMethod} className="field"/>
+            </label>
+            <label htmlFor="url" className="title">URL
+              <input
+                type="text"
+                id="url"
+                value={url}
+                onChange={(e) => {
+                  setUrl(e.target.value);
+                }}
+                className={errorUrl ? "error field" : "field"}/>
+            </label>
           </div>
-          : <Body body={body} setBody={setBody}/>}
-        <div>
-          {headers.length > 0 &&
-            <Headers
-              valueHeader={valueHeader}
-              headers={headers}
-              setHeaders={setHeaders}
-              deleteParam={deleteParam}/>}
-          <button onClick={addHeader}>Add header</button>
-        </div>
-        <div className="buttons">
-          <button onClick={() => {
-            saveRequest();
-          }}>Save request
-          </button>
-          <button onClick={sendRequest}>Send request</button>
-          <button onClick={clearForm}> Clear form</button>
+          {method === "GET" || method === ""
+            ? <div>
+              {parameters.length > 0
+                && <Params
+                  params={parameters}
+                  setParams={setParameters}
+                  deleteParam={deleteParam}
+                  error={errorParam}
+                />}
+              <button onClick={addParam}>Add parameter</button>
+            </div>
+            : <Body body={body} setBody={setBody}/>}
+          <div>
+            {headers.length > 0 &&
+              <Headers
+                valueHeader={valueHeader}
+                headers={headers}
+                setHeaders={setHeaders}
+                deleteParam={deleteParam}
+                error={errorHeader}
+              />}
+            <button onClick={addHeader}>Add header</button>
+          </div>
+          <div className="buttons">
+            <button onClick={saveRequest}>Save request
+            </button>
+            <button onClick={sendRequest}>Send request</button>
+            <button onClick={clearForm}> Clear form</button>
+          </div>
         </div>
       </div>
-      <div className="requests">
-        <div className="bodyRequest">{dataBody}</div>
-        <div className="headerRequest">{iteratorObject(dataHeader!).map(head => {
-          return <p>{head}</p>;
-        })}</div>
+      <div className="response">
+        <div className="bodyResponse">
+          <h3>Response body</h3>
+          {dataBody}
+        </div>
+        <div className="headerResponse">
+          <h3>Response headers</h3>
+          {iteratorObject(dataHeader!).map(head => {
+            return <p>{head}</p>;
+          })}
+        </div>
       </div>
     </div>
   );

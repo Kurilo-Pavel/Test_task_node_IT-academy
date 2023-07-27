@@ -6,11 +6,12 @@ type SelectProps = {
   setProps?: (value: string) => void;
   changeValue?: (value: { id: number, key: string, value: string }) => void;
   onChange?: (value: string) => void;
+  className?: string;
 }
-const Select = ({array, props, setProps, onChange}: SelectProps) => {
+const Select = ({array, props, setProps, onChange, className}: SelectProps) => {
   return <select
     id="method"
-    className="field"
+    className={className}
     value={props}
     onChange={(e) => {
       setProps ? setProps(e.target.value) : onChange!(e.target.value);

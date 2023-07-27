@@ -1,9 +1,12 @@
-const express = require('express');
-const request = require('request')
-const fs = require('fs');
-const path = require('path');
-const querystring = require("querystring");
+import express from "express";
+import request from "request";
+import fs from "fs";
+import path, {dirname} from "path";
+import {fileURLToPath} from "url";
+import {validation} from "./task_3/src/validation.js";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const webserver = express();
 const port = 7780;
 
@@ -19,14 +22,11 @@ webserver.options('/*', (req, res) => {
 
 webserver.get("/", (req, res) => {
   try {
-    const originalUrlDecoded = querystring.unescape(req.originalUrl);
     const filePath = path.resolve(__dirname, "task_3/build", "index.html");
-    const stats = fs.statSync(filePath);
     res.setHeader("Content-Type", "text/html");
     const fileStream = fs.createReadStream(filePath);
     fileStream.pipe(res);
   } catch (err) {
-    console.log(err);
     res.status(404).end();
   }
 })
@@ -43,16 +43,21 @@ webserver.post("/request", (req, res) => {
       }
       return obj;
     };
-    const requestData = req.body;
-    request({
-      method: requestData.method,
-      url: requestData.url,
-      qs: paramObj(requestData.parameters),
-      headers: paramObj(requestData.headers),
-      body: requestData.body
-    }, (er, re, body) => {
-      res.send({body: body, header: req.headers});
-    })
+
+    if (validation(req.body).length > 0) {
+      res.status(400).send({error: "complete all fields, file not written"})
+    } else {
+      const requestData = req.body;
+      request({
+        method: requestData.method,
+        url: requestData.url,
+        qs: paramObj(requestData.parameters),
+        headers: paramObj(requestData.headers),
+        body: requestData.body
+      }, (er, re, body) => {
+        res.send({body: body, header: req.headers});
+      })
+    }
   } catch (err) {
     console.log("ошибка в отправке запроса ", err);
     res.status(404).end();
@@ -87,12 +92,16 @@ webserver.post("/writeFile", (req, res) => {
       } else {
         dataFile = [...JSON.parse(data), req.body];
       }
-      fs.writeFile(pathRequest, JSON.stringify(dataFile), (err) => {
-        if (err) {
-          console.log(err);
-        }
-      });
-      res.send(dataFile);
+      if (validation(req.body).length > 0) {
+        res.status(400).send({error: "complete all fields", file: [...JSON.parse(data)]})
+      } else {
+        fs.writeFile(pathRequest, JSON.stringify(dataFile), (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+        res.send({file: dataFile});
+      }
     });
   } catch (err) {
     console.log("ошибка в записи файла ", err);

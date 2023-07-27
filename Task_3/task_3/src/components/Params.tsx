@@ -2,10 +2,10 @@ type ParamsProps = {
   params?: { id: number, key: string, value: string }[];
   setParams: (value: { id: number, key: string, value: string }[]) => void;
   deleteParam: (array: { id: number, key: string, value: string }[], setProps: (value: { id: number, key: string, value: string }[]) => void, id: number) => void;
+  error: { id: number, key: boolean, value: boolean }[];
 }
 
-const Params = ({params, setParams, deleteParam}: ParamsProps) => {
-
+const Params = ({params, setParams, deleteParam, error}: ParamsProps) => {
   const changeValue = (value: { id: number, key: string, value: string }) => {
     setParams(params!.map(param => {
       if (param.id === value.id) {
@@ -24,11 +24,17 @@ const Params = ({params, setParams, deleteParam}: ParamsProps) => {
           <input
             type="text"
             value={param.key}
-            onChange={(e) => changeValue({id: param.id, key: e.target.value, value: param.value})}/>
+            className={error.some(er=>{ return er.id === param.id && !er.key})  ? "error" : ""}
+            onChange={(e) => {
+              changeValue({id: param.id, key: e.target.value, value: param.value});
+            }}/>
           <input
             type="text"
             value={param.value}
-            onChange={(e) => changeValue({id: param.id, key: param.key, value: e.target.value})}
+            className={error.some(er=>{ return er.id === param.id && !er.value})  ? "error" : ""}
+            onChange={(e) => {
+              changeValue({id: param.id, key: param.key, value: e.target.value});
+            }}
           />
           <button
             onClick={() => deleteParam(params!, setParams, param.id)}
