@@ -21,6 +21,19 @@ webserver.options('/*', (req, res) => {
   res.send("");
 });
 
+webserver.get("/readFile", (req, res) => {
+  try {
+    fs.readFile(pathRequest, "utf8", (err, data) => {
+      let requestData = data === '' ? 'null' : data;
+      res.send(requestData);
+    });
+  } catch (err) {
+    console.log("ошибка в чтении файла ", err);
+    res.status(404).end();
+  }
+});
+
+
 webserver.get("/", (req, res) => {
   try {
     const filePath = path.resolve(__dirname, "task_3/build", "index.html");
@@ -66,17 +79,6 @@ webserver.post("/request", (req, res) => {
   }
 });
 
-webserver.get("/readFile", (req, res) => {
-  try {
-    fs.readFile(pathRequest, "utf8", (err, data) => {
-      let requestData = data === '' ? 'null' : data;
-      res.send(requestData);
-    });
-  } catch (err) {
-    console.log("ошибка в чтении файла ", err);
-    res.status(404).end();
-  }
-});
 
 webserver.post("/writeFile", (req, res) => {
   try {
