@@ -1,4 +1,4 @@
-const url = "http://localhost:7780";
+const url = "http://178.172.195.18:7780/";
 
 const getFiles = async () => {
   const response = await fetch("/read");
@@ -25,7 +25,7 @@ const sendFile = async () => {
   }
 
   if (file && comment) {
-    let connection = new WebSocket(`ws://localhost:7781/`);
+    let connection = new WebSocket(`ws://178.172.195.18:7781/`);
     connection.onopen = event => {
       connection.send(JSON.stringify("load"));
     }
@@ -91,7 +91,7 @@ let work;
 
 const downloadFile = (data) => {
     work = true;
-    const connection = new WebSocket(`ws://localhost:7781/`);
+    const connection = new WebSocket(`ws://178.172.195.18:7781/`);
     connection.onopen = () => {
       connection.send(JSON.stringify("download"));
       if (work) {
