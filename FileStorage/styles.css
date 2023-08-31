@@ -1,0 +1,19 @@
+body {
+  display: flex;
+  gap: 20px;
+}
+
+.allFiles {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dataFile {
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+.dataFile:hover {
+  background: lightgray;
+}
