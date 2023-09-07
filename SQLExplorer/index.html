@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SQLExplorer</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="request">
+  <label for="reqSQL">Send query to SQL</label>
+  <select name="select" id="select">
+    <option disabled selected>Choose Database</option>
+  </select>
+  <textarea name="sql" id="reqSQL" cols="60" rows="10"></textarea>
+    <button onclick={sendRequest()}>Send</button>
+</div>
+<div class="response"></div>
+</body>
+<script src="/script.js"></script>
+</html>

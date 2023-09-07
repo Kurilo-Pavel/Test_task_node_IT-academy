@@ -1,0 +1,26 @@
+body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.request {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 50%;
+}
+
+.response {
+  display: flex;
+  align-items: flex-start
+}
+
+.mainColumn {
+  font-weight: bold;
+  border: 1px solid black;
+}
+
+.column {
+  border: 1px solid black;
+}
