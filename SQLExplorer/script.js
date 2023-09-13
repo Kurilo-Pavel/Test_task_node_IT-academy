@@ -1,5 +1,5 @@
-const url = "http://178.172.195.18:7780";
-// const url = "http://localhost:7780";
+// const url = "http://178.172.195.18:7780";
+const url = "http://localhost:7780";
 (async () => {
   const request = await fetch(url + "/dataBases");
   const data = await request.json();

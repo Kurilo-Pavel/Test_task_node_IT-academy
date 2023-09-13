@@ -53,6 +53,7 @@ server.post("/dataBase", (request, response) => {
         if(Array.isArray(results)) {
           response.send({array: results});
         }else{
+          console.log(results)
           response.send({object:results})
         }
       }
